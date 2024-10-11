@@ -31,19 +31,6 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required',
         ]);
-
-        // Create a new user
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->save();
-
-        // Return the user token as a response
-        return response()->json([
-            'token' => $user->createToken($request->email)->plainTextToken, // required
-            'user' => $user, // optional
-        ]);
     }
 
     /**
@@ -70,7 +57,7 @@ class AuthController extends Controller
         // Return the user token as a response
         return response()->json([
             'token' => $user->createToken($request->email)->plainTextToken, // required
-            'user' => $user, // optional
+            // 'user' => $user, // optional
         ]);
     }
 
