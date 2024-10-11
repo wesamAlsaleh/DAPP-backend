@@ -7,6 +7,8 @@ use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\Page;
+use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -40,7 +42,9 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('password')
                     ->label('Password')
                     ->password()
-                    ->required()
+                    ->password()
+                    ->dehydrated(fn($state) => filled($state)) // check if not empty
+                    ->required(fn(Page $livewire): bool => $livewire instanceof CreateRecord) // the password field is mandatory if its create record (create new user)
                     ->maxLength(255)
                     ->minLength(8)
                     ->placeholder('Enter password')
@@ -78,8 +82,12 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
