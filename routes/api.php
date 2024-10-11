@@ -15,12 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+}); // working good
 
 // Test the API
-Route::post('/test', [AuthController::class, 'test']);
+Route::post('/test', function () {
+    return response()->json([
+        'message' => 'API is working good'
+    ]);
+});  // working good
 
 
 /**
@@ -28,8 +32,8 @@ Route::post('/test', [AuthController::class, 'test']);
 | Auth Routes
 |--------------------------------------------------------------------------
  */
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']); // not yet working
+Route::post('/login', [AuthController::class, 'login']); // working good
 
 
 /**
