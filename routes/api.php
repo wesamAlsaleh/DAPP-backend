@@ -15,10 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-}); // working good
-
 // Test the API
 Route::post('/test', function () {
     return response()->json([
@@ -33,8 +29,17 @@ Route::post('/test', function () {
 |--------------------------------------------------------------------------
  */
 Route::post('/register', [AuthController::class, 'register']); // not yet working
+
 Route::post('/login', [AuthController::class, 'login']); // working good
 
+// ALl the routes below are required to be authenticated
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    }); // working good
+
+    Route::post('/logout', [AuthController::class, 'logout']); // working good
+});
 
 /**
 |--------------------------------------------------------------------------

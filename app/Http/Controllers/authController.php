@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -14,12 +16,54 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        // Validate the request
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required',
+        // Validate the request data
+        $validated = $request->validate([
+            // User Fields
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/[a-zA-Z]/',      // Must contain letters
+                'regex:/[0-9]/',         // Must contain numbers
+                'regex:/[@$!%*#?&]/',    // Must contain special characters
+            ],
+        ], [
+            'password.regex' => 'Password must contain at least one letter, one number, and one special character.',
         ]);
+
+        try {
+            // Create a new user with the validated data
+            $user = User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+            ]);
+
+
+            // Optionally, delete existing tokens if enforcing single session
+            // $user->tokens()->delete();
+
+            // Create a new token for the user
+            $token = $user->createToken('API Token of ' . $user->email)->plainTextToken;
+
+            // Return a success response with selected user data and token
+            return response()->json([
+                'message' => 'User created successfully',
+                'token' => $token,
+                // 'user' => $user->only(['id', 'name', 'email']),
+            ], 201);
+        } catch (\Exception $e) {
+            // Log the exception for debugging
+            Log::error('User Registration Failed: ' . $e->getMessage());
+
+            // Return a detailed error response
+            return response()->json([
+                'message' => 'User registration failed. Please try again.',
+                // 'error' => $e->getMessage(), // Remove in production for security
+            ], 500);
+        }
     }
 
     /**
@@ -45,9 +89,9 @@ class AuthController extends Controller
 
         // Return the user token as a response
         return response()->json([
-            'token' => $user->createToken($request->email)->plainTextToken, // required
+            'token' => $user->createToken('API Token of ' . $request->email)->plainTextToken, // required
             // 'user' => $user, // optional
-        ]);
+        ], 200);
     }
 
     /**
@@ -55,6 +99,10 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        //
+        // Revoke the current user token and delete it
+        request()->user()->currentAccessToken()->delete();
+
+        // Return a no content response with 204 status code (success)
+        return response()->noContent();
     }
 }
