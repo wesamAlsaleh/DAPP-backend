@@ -43,7 +43,7 @@ class AuthController extends Controller
 
             // Return a success response with selected user data and token
             return response()->json([
-                'token' => $user->createToken('API Token of ' . $user->email, now()->addWeek())->plainTextToken,
+                'token' => $user->createToken('API Token of ' . $user->email)->plainTextToken,
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
@@ -75,7 +75,7 @@ class AuthController extends Controller
 
         // Return the user token as a response
         return response()->json([
-            'token' => $user->createToken('API Token of ' . $request->email, now()->addWeek())->plainTextToken, // required
+            'token' => $user->createToken('API Token of ' . $request->email)->plainTextToken, // required
             // 'user' => $user, // optional
         ], 200);
     }
