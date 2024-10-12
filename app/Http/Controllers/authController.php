@@ -50,8 +50,8 @@ class AuthController extends Controller
 
             // Return a success response with selected user data and token
             return response()->json([
-                'message' => 'User created successfully',
                 'token' => $token,
+                // 'message' => 'User created successfully',
                 // 'user' => $user->only(['id', 'name', 'email']),
             ], 201);
         } catch (\Exception $e) {
