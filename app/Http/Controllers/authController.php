@@ -41,27 +41,13 @@ class AuthController extends Controller
                 'password' => Hash::make($validated['password']),
             ]);
 
-
-            // Optionally, delete existing tokens if enforcing single session
-            // $user->tokens()->delete();
-
-            // Create a new token for the user
-            $token = $user->createToken('API Token of ' . $user->email)->plainTextToken;
-
             // Return a success response with selected user data and token
             return response()->json([
-                'token' => $token,
-                // 'message' => 'User created successfully',
-                // 'user' => $user->only(['id', 'name', 'email']),
+                'token' => $user->createToken('API Token of ' . $user->email)->plainTextToken,
             ], 201);
         } catch (\Exception $e) {
-            // Log the exception for debugging
-            Log::error('User Registration Failed: ' . $e->getMessage());
-
-            // Return a detailed error response
             return response()->json([
                 'message' => 'User registration failed. Please try again.',
-                // 'error' => $e->getMessage(), // Remove in production for security
             ], 500);
         }
     }
