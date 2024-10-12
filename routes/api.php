@@ -28,7 +28,7 @@ Route::post('/test', function () {
 | Auth Routes
 |--------------------------------------------------------------------------
  */
-Route::post('/register', [AuthController::class, 'register']); // not yet working
+Route::post('/register', [AuthController::class, 'register']); // working good
 
 Route::post('/login', [AuthController::class, 'login']); // working good
 
