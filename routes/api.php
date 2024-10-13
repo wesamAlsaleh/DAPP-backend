@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DriverController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -43,10 +44,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 /**
 |--------------------------------------------------------------------------
-| ... Routes
+| Driver Routes
 |--------------------------------------------------------------------------
  */
-
+Route::get('/drivers', [DriverController::class, 'drivers']); // working good , return array of objects of drivers [{id: ... }, {id: ... }, {id: ... }]
 
 /**
 |--------------------------------------------------------------------------
