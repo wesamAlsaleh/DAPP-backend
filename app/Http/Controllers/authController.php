@@ -41,7 +41,7 @@ class AuthController extends Controller
                 'password' => Hash::make($validated['password']),
             ]);
 
-            // Return a success response with selected user data and token
+            // Return a success response with the user token
             return response()->json([
                 'token' => $user->createToken('API Token of ' . $user->email, ['*'], now()->addWeek())->plainTextToken,
             ], 201);
@@ -76,14 +76,13 @@ class AuthController extends Controller
         // Return the user token as a response
         return response()->json([
             'token' => $user->createToken('API Token of ' . $request->email, ['*'], now()->addWeek())->plainTextToken, // required
-            // 'user' => $user, // optional
         ], 200);
     }
 
     /**
      * Log out a user.
      */
-    public function logout(Request $request)
+    public function logout()
     {
         // Revoke the current user token and delete it
         request()->user()->currentAccessToken()->delete();
