@@ -29,6 +29,9 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'role' => fake()->randomElement(['driver', 'admin']),
+            'status' => fake()->randomElement(['available', 'offline', 'busy']), // Random status
+            'latitude' => fake()->latitude(), // Generate a random latitude
+            'longitude' => fake()->longitude(), // Generate a random longitude
             'remember_token' => Str::random(10),
         ];
     }
