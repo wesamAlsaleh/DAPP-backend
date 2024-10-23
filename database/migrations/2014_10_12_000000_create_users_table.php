@@ -18,6 +18,9 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['driver', 'admin'])->default('driver');
+            $table->enum('status', ['available', 'offline', 'busy'])->default('available');
+            $table->decimal('latitude', 10, 7)->nullable(); // To store user's latitude
+            $table->decimal('longitude', 10, 7)->nullable(); // To store user's longitude
             $table->rememberToken();
             $table->timestamps();
         });
