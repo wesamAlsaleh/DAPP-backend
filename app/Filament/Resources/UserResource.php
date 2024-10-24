@@ -65,7 +65,7 @@ class UserResource extends Resource
                         ->helperText('Password must contain at least one letter, one number, and one special character'),
                 ]),
 
-                Section::make('User privileges')->schema(
+                Section::make('User Privileges')->schema(
                     [
                         ToggleButtons::make('role')
                             ->label('')
@@ -76,16 +76,42 @@ class UserResource extends Resource
                             ])
                             ->colors([
                                 'driver' =>  Color::Indigo,
-                                'admin' =>  Color::Rose,
+                                'admin' =>  Color::Orange,
                             ])
                             ->icons([
                                 'driver' => 'heroicon-o-truck',
                                 'admin' => 'heroicon-o-shield-check',
                             ])
                             ->default('driver')
-
                     ]
                 ),
+
+                Section::make('User Status')->schema(
+                    [
+                        ToggleButtons::make('status')
+                            ->label('')
+                            ->inline()
+                            ->options([
+                                'available' => 'Available',
+                                'offline' => 'Offline',
+                                'busy' => 'Busy'
+                            ])
+                            ->colors([
+                                'available' => Color::Teal,
+                                'offline' => Color::Red,
+                                'busy' => Color::Fuchsia
+                            ])
+                            ->icons([
+                                'available' => 'heroicon-o-bolt',
+                                'offline' => 'heroicon-o-bolt-slash',
+                                'busy' => 'heroicon-o-clock',
+                            ])
+                            ->default('available'),
+                    ]
+                ),
+
+
+
             ]);
     }
 
@@ -104,11 +130,26 @@ class UserResource extends Resource
                     ->badge()
                     ->color(fn(string $state) => match ($state) {
                         'driver' =>  Color::Indigo,
-                        'admin' =>  Color::Rose,
+                        'admin' =>   Color::Orange,
                     })
                     ->icon(fn(string $state) => match ($state) {
                         'driver' => 'heroicon-o-truck',
                         'admin' => 'heroicon-o-shield-check',
+                    })
+                    ->formatStateUsing(fn(string $state): string => ucfirst($state)), // capitalize the first letter
+
+                Tables\Columns\TextColumn::make('status')
+                    ->searchable()
+                    ->badge()
+                    ->color(fn(string $state) => match ($state) {
+                        'available' => Color::Fuchsia,
+                        'offline' => Color::Cyan,
+                        'busy' => Color::Teal
+                    })
+                    ->icon(fn(string $state) => match ($state) {
+                        'available' => 'heroicon-o-bolt',
+                        'offline' => 'heroicon-o-bolt-slash',
+                        'busy' => 'heroicon-o-clock',
                     })
                     ->formatStateUsing(fn(string $state): string => ucfirst($state)), // capitalize the first letter
 
