@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +41,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     }); // working good
 
     Route::post('/logout', [AuthController::class, 'logout']); // working good
+
+    Route::post('/user/location', [UserController::class, 'updateLocation']); // working good
 });
 
 /**
@@ -49,11 +52,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
  */
 Route::get('/drivers', [DriverController::class, 'drivers']); // working good , return array of objects of drivers [{id: ... }, {id: ... }, {id: ... }]
 
+
 /**
-|--------------------------------------------------------------------------
-| ....... Routes
-|--------------------------------------------------------------------------
+ |--------------------------------------------------------------------------
+ | Location Routes
+ |--------------------------------------------------------------------------
  */
+
 
 
 /**
