@@ -35,4 +35,29 @@ class UserController extends Controller
             'message' => 'User location updated successfully',
         ]);
     }
+
+    /**
+     * Update the authenticated user's Status.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function changeStatus(Request $request)
+    {
+        $request->validate([
+            'status' => 'required|string|in:available,busy,offline',
+        ]);
+
+        // Get the currently authenticated user
+        $user = request()->user();
+
+        // Update the user states
+        $user->status = $request->status;
+        $user->save();
+
+        return response()->json([
+            'message' => 'Status updated successfully',
+            'status' => $user->status,
+        ]);
+    }
 }

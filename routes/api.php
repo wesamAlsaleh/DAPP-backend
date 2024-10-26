@@ -43,6 +43,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']); // working good
 
     Route::post('/user/location', [UserController::class, 'updateLocation']); // working good
+
+    Route::post('/user/change-status', [UserController::class, 'changeStatus']); // working good
 });
 
 /**
