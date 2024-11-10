@@ -42,8 +42,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/logout', [AuthController::class, 'logout']); // working good
 
-    Route::post('/user/location', [UserController::class, 'updateLocation']); // working good
-
     Route::post('/user/change-status', [UserController::class, 'changeStatus']); // working good
 });
 
@@ -52,15 +50,29 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 | Driver Routes
 |--------------------------------------------------------------------------
  */
-Route::get('/drivers', [DriverController::class, 'drivers']); // working good , return array of objects of drivers [{id: ... }, {id: ... }, {id: ... }]
+Route::get('/drivers', [DriverController::class, 'allDrivers']); // working good
 
+Route::get('/available-drivers-count', [DriverController::class, 'availableDriversCount']); // working good
+Route::get('/available-drivers-filter', [DriverController::class, 'availableDriversFilter']); // working good
+
+Route::get('/busy-drivers-count', [DriverController::class, 'busyDriversCount']); // working good
+Route::get('/busy-drivers-filter', [DriverController::class, 'busyDriversFilter']); // working good
+
+Route::get('/offline-drivers-count', [DriverController::class, 'offlineDriversCount']); // working good
+Route::get('/offline-drivers-filter', [DriverController::class, 'offlineDriversFilter']); // working good
+
+Route::get('driver/{id}', [DriverController::class, 'getDriver']); // working good
+
+Route::get('/map-drivers', [DriverController::class, 'MapDrivers']); // working good
 
 /**
  |--------------------------------------------------------------------------
  | Location Routes
  |--------------------------------------------------------------------------
  */
-
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::post('/user/location', [UserController::class, 'updateLocation']); // working good
+});
 
 
 /**
